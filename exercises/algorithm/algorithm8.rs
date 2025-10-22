@@ -55,6 +55,7 @@ impl<T> Default for Queue<T> {
 pub struct myStack<T>
 {
 	//TODO
+    in_q1: bool,
 	q1:Queue<T>,
 	q2:Queue<T>
 }
@@ -62,12 +63,17 @@ impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
+            in_q1: false,
 			q1:Queue::<T>::new(),
 			q2:Queue::<T>::new()
         }
     }
     pub fn push(&mut self, elem: T) {
         //TODO
+        if self.in_q1 {
+            self.q2.enqueue(elem);
+
+        }
     }
     pub fn pop(&mut self) -> Result<T, &str> {
         //TODO

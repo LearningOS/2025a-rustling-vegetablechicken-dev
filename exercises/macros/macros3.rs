@@ -16,5 +16,6 @@ mod macros {
 }
 
 fn main() {
+    use macros;
     my_macro!();
 }
