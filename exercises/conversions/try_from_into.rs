@@ -27,7 +27,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation and return an Ok result of inner
 // type Color. You need to create an implementation for a tuple of three
@@ -41,6 +40,19 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let red: u8 = match tuple.0.try_into() {
+            Ok(i) => i,
+            Err(_) => return Err(IntoColorError::IntConversion),
+        };
+        let green: u8 = match tuple.1.try_into() {
+            Ok(i) => i,
+            Err(_) => return Err(IntoColorError::IntConversion),
+        };
+        let blue: u8 = match tuple.2.try_into() {
+            Ok(i) => i,
+            Err(_) => return Err(IntoColorError::IntConversion),
+        };
+        Ok(Color { red, green, blue })
     }
 }
 
@@ -48,6 +60,14 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let mut color_num: [u8; 3] = [0; 3];
+        for i in 0..3 {
+            color_num[i] = match arr[i].try_into() {
+                Ok(i) => i,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            }
+        }
+        Ok(Color { red: color_num[0], green: color_num[1], blue: color_num[2] })
     }
 }
 
@@ -55,6 +75,17 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(Self::Error::BadLen);
+        }
+        let mut color_num: [u8; 3] = [0; 3];
+        for i in 0..3 {
+            color_num[i] = match slice[i].try_into() {
+                Ok(i) => i,
+                Err(_) => return Err(Self::Error::IntConversion),
+            }
+        }
+        Ok(Color { red: color_num[0], green: color_num[1], blue: color_num[2] })
     }
 }
 
